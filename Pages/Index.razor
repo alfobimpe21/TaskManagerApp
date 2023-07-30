@@ -4,10 +4,97 @@
 
 <div class="row">
     <div class="col-md-6">
-        <SurveyPrompt Title="Side 1"/>
+        
+        <div class="card card-primary">
+            <div class="card-header">
+                <h3 class="card-title">Add Task Form</h3>
+            </div>
+
+            <form>
+                <div class="card-body">
+                    <div class="form-group">
+                        <label>Task</label>
+                        <input type="text" @bind="TaskField" class="form-control" placeholder="Enter Task">
+                    </div>
+                    <div class="form-group">
+                        <label>Deadline</label>
+                        <input type="date" @bind="DeadlineField" class="form-control" >
+                    </div>
+                </div>
+                <div class="card-footer">
+                    <button type="button" @onclick="display"  class="btn btn-primary">Submit</button>
+                </div>
+            </form>
+        </div>
     </div>
     
     <div class="col-md-6">
-        <SurveyPrompt Title="Side 2" />
+        <h4>LIST OF TASKS</h4>
+        <hr/>
+        @{
+            if (TaskList.Count() > 0)
+            {
+            
+            
+                <table class="table table-striped">
+                    <thead bgcolor="#1f618d" style="color:white">
+                        <th>Task</th>
+                        <th>Deadline</th>
+                        <th>Action</th>
+                    </thead>
+                    <tbody>
+                        @{
+                   
+                            foreach (var t in TaskList)
+                            {
+
+                                <tr>
+                                    <td>@t.Task</td>
+                                    <td>@t.Deadline.ToString("dd MMMM yyyy")</td>
+                                    <td>
+                                        <a href="javascript;" class="btn btn-danger btn-sm">Delete
+                                        </a>
+                                    </td>
+                                </tr>
+
+                            }                   
+                   
+                        }
+                    </tbody>
+                </table>
+            } 
+            else
+            {
+                <SurveyPrompt Title="NO TASK AT THE MOMMENT" />
+            }
+        }
     </div>
 </div>
+
+@code {
+    private string ? TaskField;
+    private DateTime DeadlineField;
+
+    List<TaskManager> TaskList = new List<TaskManager>();
+
+    private void display()
+    {
+        var userTask = new TaskManager()
+        {
+            Deadline = DeadlineField,
+            Task = TaskField
+        };
+
+        TaskList.Add(userTask);
+
+        //Console.WriteLine($"Your Task is : {TaskField} \n Deadline is : {DeadlineField.ToString("dd MMMM yyyy")}");
+
+        //Console.WriteLine($" Number of task {TaskList.Count()}");
+    }
+
+    private class TaskManager
+    {
+        public string Task  { get; set; }
+        public DateTime Deadline { get; set; }
+    }
+}
