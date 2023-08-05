@@ -34,8 +34,7 @@
         @{
             if (TaskList.Count() > 0)
             {
-            
-            
+                        
                 <table class="table table-striped">
                     <thead bgcolor="#1f618d" style="color:white">
                         <th>Task</th>
@@ -50,10 +49,10 @@
 
                                 <tr>
                                     <td>@t.Task</td>
-                                    <td>@t.Deadline.ToString("dd MMMM yyyy")</td>
+                                    <td>@t.Deadline.ToString("dddd, dd MMMM yyyy")</td>
                                     <td>
-                                        <a href="javascript;" class="btn btn-danger btn-sm">Delete
-                                        </a>
+                                        <button type="button" @onclick="()=>deleteTask(t.Id)" class="btn btn-danger btn-sm">Delete
+                                        </button>
                                     </td>
                                 </tr>
 
@@ -77,23 +76,34 @@
 
     List<TaskManager> TaskList = new List<TaskManager>();
 
+
     private void display()
     {
         var userTask = new TaskManager()
         {
+            Id = Guid.NewGuid().ToString("N"),
             Deadline = DeadlineField,
             Task = TaskField
         };
 
         TaskList.Add(userTask);
+        var itemAscOrder = TaskList.OrderBy(x => x.Deadline).ToList();
+        TaskList = itemAscOrder;
 
-        //Console.WriteLine($"Your Task is : {TaskField} \n Deadline is : {DeadlineField.ToString("dd MMMM yyyy")}");
 
-        //Console.WriteLine($" Number of task {TaskList.Count()}");
+    }
+
+    private void deleteTask(string value)
+    {
+        Console.WriteLine(value);
+        
+        TaskList.RemoveAll(x=>x.Id == value );
+        
     }
 
     private class TaskManager
     {
+        public string Id { get; set; }
         public string Task  { get; set; }
         public DateTime Deadline { get; set; }
     }
